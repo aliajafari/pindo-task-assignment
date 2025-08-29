@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
+# Pindo Tree (Frontend Task)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small React + Vite + TypeScript app that manages a simple file/folder tree with Redux Toolkit. State is persisted to `localStorage`.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stack
 
-## Expanding the ESLint configuration
+* **React 18** + **Vite**
+* **TypeScript**
+* **Redux Toolkit** (RTK)
+* **CSS Modules** for styling
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Quick start
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+```bash
+# install
+npm i 
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# dev
+npm run dev # http://localhost:5173
+
+# build
+npm run build
+
+# preview build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* Create folder/file (two-step for files: **name → extension**)
+* Rename folder/file (modal, validated)
+* Delete folder/file (confirm modal)
+* **Case-insensitive uniqueness** (e.g., `Ali.txt` ≡ `ali.txt`; `Docs` ≡ `docs`)
+* Persist state in `localStorage`
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## AI usage (concise)
+
+Used AI as a speed-up for boilerplate, TypeScript/RTK compatibility checks, and improving Redux implementation.  
+Core data model and logic were designed and implemented by myself.
+
+**Sample prompts**
+
+* "Give me an example of persisting data in Redux Toolkit to localStorage"  
+* "Tree data structure concept in JavaScript"  
+* "Generate a clean README.md"
+
+---
