@@ -7,7 +7,7 @@ import PromptDialog from "@/components/ui/PromptDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Node from "@/components/tree/Node";
 import { ERRORS } from "@/constants";
-import { invalid } from "@/features/tree/validators";
+import { invalid } from "@/lib/validators";
 
 type ModalType = "addFolder" | "addFile" | "addExt" | "delete" | null;
 

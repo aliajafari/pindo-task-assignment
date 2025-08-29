@@ -1,7 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Modal from "@/components/ui/Modal";
-import Input from "../FormElements/Input";
-import Button from "../FormElements/Button";
+import Input from "@/components/ui/FormElements/Input";
+import Button from "@/components/ui/FormElements/Button";
 
 type Props = {
   open: boolean;

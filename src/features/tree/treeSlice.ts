@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { TreeState, FolderMeta, FileMeta } from "./types";
-import { invalid, buildFileKey, hasFolderByName, hasFileByKey, normalizeExt, normalizeName } from "./validators";
+import { invalid, buildFileKey, hasFolderByName, hasFileByKey, normalizeExt, normalizeName } from "@/lib/validators";
 import { ERRORS } from "@/constants";
 
 const initialState: TreeState = {
