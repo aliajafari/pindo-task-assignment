@@ -1,16 +1,16 @@
-export type TypeNode = "dir" | "file";
+export type TypeNode = "folder" | "file";
 
 export type FileMeta = { name: string; ext: string };
-export type DirMeta = { name: string };
+export type FolderMeta = { name: string };
 
 export type Node = {
   id: string;
   type: TypeNode;
   parentId: string | null;
-  meta: FileMeta | DirMeta;
+  meta: FileMeta | FolderMeta;
   children?: string[];
   fileIndex?: Record<string, string>;
-  dirIndex?: Record<string, string>;
+  folderIndex?: Record<string, string>;
 };
 
 export type TreeState = {

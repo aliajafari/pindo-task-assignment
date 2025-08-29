@@ -1,6 +1,9 @@
 .name {
-  gap: 6px;
-  align-items: center;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  align-self: center;
 }
 
 .row {
@@ -8,6 +11,8 @@
   width: 100%;
   overflow: hidden;
   padding: 5px 10px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .children {
@@ -18,9 +23,8 @@
 }
 
 .actions {
-  gap: 6px;
-  margin-left: auto;
   display: flex;
+  gap: 4px;
 }
 
 .btn {

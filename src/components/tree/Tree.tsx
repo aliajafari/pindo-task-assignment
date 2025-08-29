@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/state/hooks";
-import DirNode from "@/components/tree/DirNode";
+import FolderNode from "@/components/tree/FolderNode";
 
 export default function Tree() {
   const rootId = useAppSelector((s) => s.tree.rootId);
-  return <DirNode id={rootId} />;
+  return <FolderNode id={rootId} />;
 }

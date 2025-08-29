@@ -1,19 +1,19 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { createContext, ReactNode, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 
 type Toast = { id: number; kind: "success" | "error"; text: string };
 
-type Ctx = {
+type ToastType = {
   success: (text: string, ms?: number) => void;
   error: (text: string, ms?: number) => void;
 };
 
-export const ToastContext = createContext<Ctx | null>(null);
+export const ToastContext = createContext<ToastType | null>(null);
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Toast[]>([]);
 
-  const api = useMemo<Ctx>(
+  const api = useMemo<ToastType>(
     () => ({
       success: (text, ms = 2200) => {
         const id = Date.now() + Math.random();

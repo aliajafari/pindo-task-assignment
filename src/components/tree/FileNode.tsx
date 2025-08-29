@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
 import { deleteNode, renameNode } from "@/features/tree/treeSlice";
 import styles from "./styles.module.css";
@@ -6,7 +6,7 @@ import useToast from "@/hooks/useToast";
 import PromptDialog from "@/components/ui/PromptDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
-export default function FileNode({ id }: { id: string }) {
+function FileNode({ id }: { id: string }) {
   const node = useAppSelector((s) => s.tree.byId[id]);
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -96,3 +96,5 @@ export default function FileNode({ id }: { id: string }) {
     </div>
   );
 }
+
+export default memo(FileNode);

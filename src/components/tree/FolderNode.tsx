@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
-import { addDir, addFile, deleteNode } from "@/features/tree/treeSlice";
+import { addFolder, addFile, deleteNode } from "@/features/tree/treeSlice";
 import styles from "./styles.module.css";
 import useToast from "@/hooks/useToast";
 import PromptDialog from "@/components/ui/PromptDialog";
@@ -9,12 +9,12 @@ import Node from "@/components/tree/Node";
 
 type ModalType = "addFolder" | "addFile" | "addExt" | "delete" | null;
 
-export default function DirNode({ id }: { id: string }) {
+function FolderNode({ id }: { id: string }) {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
   const node = useAppSelector((s) => s.tree.byId[id]);
-  if (!node || node.type !== "dir") return null;
+  if (!node || node.type !== "folder") return null;
 
   const isRoot = node.parentId === null;
   const meta = node.meta as { name: string };
@@ -25,16 +25,20 @@ export default function DirNode({ id }: { id: string }) {
 
   const closeModal = () => setOpenModal(null);
   const openAddFolder = () => setOpenModal("addFolder");
-
   const openAddFile = () => setOpenModal("addFile");
   const openDelete = () => setOpenModal("delete");
 
   function submitAddFolder(val?: string) {
     const name = (val || "").trim();
     if (!name) return;
-    dispatch(addDir({ parentId: id, name }));
-    toast.success("Folder created");
-    closeModal();
+    try {
+      dispatch(addFolder({ parentId: id, name }));
+      toast.success("Folder created");
+      closeModal();
+    } catch (e: any) {
+      toast.error(e?.message || "Error");
+    }
+    
   }
 
   function submitAddFileName(val?: string) {
@@ -154,3 +158,5 @@ export default function DirNode({ id }: { id: string }) {
     </div>
   );
 }
+
+export default memo(FolderNode);
