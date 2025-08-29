@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { TreeState, FolderMeta, FileMeta } from "./types";
-import { invalid, buildFileKey, hasFolderByName, hasFileByKey, normalizeExt, normalizeName, errors } from "./validators";
+import { invalid, buildFileKey, hasFolderByName, hasFileByKey, normalizeExt, normalizeName } from "./validators";
+import { ERRORS } from "@/constants";
 
 const initialState: TreeState = {
   rootId: "root",
@@ -26,10 +27,10 @@ const treeSlice = createSlice({
     addFolder: (state, action: PayloadAction<{ parentId: string; name: string }>) => {
       const { parentId, name } = action.payload;
       const parent = state.byId[parentId];
-      if (!parent) throw new Error(errors.parentNotFound);
-      if (parent.type !== "folder") throw new Error(errors.invalidParent);
-      if (invalid(name)) throw new Error(errors.invalid);
-      if (hasFolderByName(parent.folderIndex, name)) throw new Error(errors.duplicate);
+      if (!parent) throw new Error(ERRORS.parentNotFound);
+      if (parent.type !== "folder") throw new Error(ERRORS.invalidParent);
+      if (invalid(name)) throw new Error(ERRORS.invalid);
+      if (hasFolderByName(parent.folderIndex, name)) throw new Error(ERRORS.duplicate);
 
       const id = crypto.randomUUID();
       state.byId[id] = {
@@ -48,11 +49,11 @@ const treeSlice = createSlice({
     addFile: (state, action: PayloadAction<{ parentId: string; name: string; ext: string }>) => {
       const { parentId, name, ext } = action.payload;
       const parent = state.byId[parentId];
-      if (!parent) throw new Error(errors.parentNotFound);
-        if (parent.type !== "folder") throw new Error(errors.invalidParent);
-      if (invalid(name) || invalid(ext)) throw new Error(errors.invalid);
+      if (!parent) throw new Error(ERRORS.parentNotFound);
+        if (parent.type !== "folder") throw new Error(ERRORS.invalidParent);
+      if (invalid(name) || invalid(ext)) throw new Error(ERRORS.invalid);
       const key = buildFileKey(name, ext);
-      if (hasFileByKey(parent.fileIndex, name, ext)) throw new Error(errors.duplicate);
+      if (hasFileByKey(parent.fileIndex, name, ext)) throw new Error(ERRORS.duplicate);
 
       const id = crypto.randomUUID();
       state.byId[id] = { id, type: "file", parentId, meta: { name, ext: normalizeExt(ext) } };
@@ -64,26 +65,26 @@ const treeSlice = createSlice({
       const { id, name, ext } = action.payload;
       const node = state.byId[id];
       if (!node) return;
-      if (node.parentId === null) throw new Error(errors.protectedRoot);
+      if (node.parentId === null) throw new Error(ERRORS.protectedRoot);
       const parent = state.byId[node.parentId!];
-      if (!parent) throw new Error(errors.parentNotFound);
+      if (!parent) throw new Error(ERRORS.parentNotFound);
 
       if (node.type === "folder") {
-        if (invalid(name)) throw new Error(errors.invalid);
+        if (invalid(name)) throw new Error(ERRORS.invalid);
         const prevName = (node.meta as FolderMeta).name;
         const prevKey = normalizeName(prevName);
         const nextKey = normalizeName(name);
-        if (prevKey !== nextKey && hasFolderByName(parent.folderIndex, name)) throw new Error(errors.duplicate);
+        if (prevKey !== nextKey && hasFolderByName(parent.folderIndex, name)) throw new Error(ERRORS.duplicate);
         delete parent.folderIndex![prevKey];
         parent.folderIndex![nextKey] = id;
         (node.meta as FolderMeta).name = name;
       } else {
         const nextExt = normalizeExt(ext ?? (node.meta as FileMeta).ext);
-        if (invalid(name) || invalid(nextExt)) throw new Error(errors.invalid);
+        if (invalid(name) || invalid(nextExt)) throw new Error(ERRORS.invalid);
         const prev = node.meta as FileMeta;
         const prevKey = buildFileKey(prev.name, prev.ext);
         const nextKey = buildFileKey(name, nextExt);
-        if (prevKey !== nextKey && hasFileByKey(parent.fileIndex, name, nextExt)) throw new Error(errors.duplicate);
+        if (prevKey !== nextKey && hasFileByKey(parent.fileIndex, name, nextExt)) throw new Error(ERRORS.duplicate);
         delete parent.fileIndex![prevKey];
         parent.fileIndex![nextKey] = id;
         prev.name = name;
@@ -95,9 +96,9 @@ const treeSlice = createSlice({
       const { id } = action.payload;
       const node = state.byId[id];
       if (!node) return;
-      if (node.parentId === null) throw new Error(errors.protectedRoot);
+      if (node.parentId === null) throw new Error(ERRORS.protectedRoot);
       const parent = state.byId[node.parentId!];
-      if (!parent) throw new Error(errors.parentNotFound);
+      if (!parent) throw new Error(ERRORS.parentNotFound);
 
       const stack = [id];
       const toDelete: string[] = [];

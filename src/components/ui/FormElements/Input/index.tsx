@@ -28,6 +28,7 @@ export default function Input({
         </label>
       )}
       <input
+        id={name}
         className={styles.input}
         name={name}
         type={type}

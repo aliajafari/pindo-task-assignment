@@ -6,6 +6,8 @@ import useToast from "@/hooks/useToast";
 import PromptDialog from "@/components/ui/PromptDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Node from "@/components/tree/Node";
+import { ERRORS } from "@/constants";
+import { invalid } from "@/features/tree/validators";
 
 type ModalType = "addFolder" | "addFile" | "addExt" | "delete" | null;
 
@@ -29,36 +31,38 @@ function FolderNode({ id }: { id: string }) {
   const openDelete = () => setOpenModal("delete");
 
   function submitAddFolder(val?: string) {
-    const name = (val || "").trim();
+    const name = val?.trim();
     if (!name) return;
     try {
       dispatch(addFolder({ parentId: id, name }));
       toast.success("Folder created");
       closeModal();
     } catch (e: any) {
-      toast.error(e?.message || "Error");
+      toast.error(e.message || "Error");
     }
-    
   }
 
   function submitAddFileName(val?: string) {
-    const name = (val || "").trim();
+    const name = val?.trim();
     if (!name) return;
+    if(invalid(name)) {
+      toast.error(ERRORS.invalid);
+      return;
+    }
     setNameDraft(name);
     setOpenModal("addExt");
   }
 
   function submitAddFileExt(extVal?: string) {
-    const ext = (extVal || "").trim();
+    const ext = extVal?.trim();
     if (!ext) return;
     try {
       dispatch(addFile({ parentId: id, name: nameDraft, ext }));
       toast.success("File created");
-    } catch (e: any) {
-      toast.error(e?.message || "Error");
-    } finally {
       closeModal();
-      setNameDraft("");
+    } catch (e: any) {
+      if (e.message === ERRORS.duplicate || e.message === ERRORS.invalid) setOpenModal("addFile");
+      toast.error(e.message || "Error");
     }
   }
 
@@ -67,14 +71,14 @@ function FolderNode({ id }: { id: string }) {
       dispatch(deleteNode({ id }));
       toast.success("Folder deleted");
     } catch (e: any) {
-      toast.error(e?.message || "Error");
+      toast.error(e.message || "Error");
     } finally {
       closeModal();
     }
   }
 
   return (
-    <div >
+    <div>
       <div className={styles.row}>
         <span className={styles.name}>📂 {meta.name}</span>
         <div className={styles.actions}>

@@ -18,18 +18,18 @@
 }
 
 .header {
-  padding: 15px;
+  padding: 1rem;
   border-bottom: 1px solid #eee;
 }
 
 .body {
-  padding: 16px;
+  padding: 1rem;
 }
 
 .footer {
   display: flex;
-  gap: 8px;
+  gap: .5rem;
   justify-content: flex-end;
-  padding: 12px 16px;
+  padding: 1rem 1rem;
   border-top: 1px solid #eee;
 }

@@ -4,21 +4,21 @@
   align-items: flex-start;
   justify-content: flex-start;
   height: 100vh;
-  padding: 10px;
+  padding: 1rem;
 }
 
 .app {
   width: 90vw;
   max-width: 90%;
   margin: 0 auto;
-  padding: 10px;
+  padding: .5rem;
   background: #cfcfcf;
   height: 100%;
   overflow: scroll;
 }
 
 .app::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   background: rgb(196, 196, 196);
 }
 .app::-webkit-scrollbar-track {

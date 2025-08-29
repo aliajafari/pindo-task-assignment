@@ -5,32 +5,38 @@ import styles from "./styles.module.css";
 import useToast from "@/hooks/useToast";
 import PromptDialog from "@/components/ui/PromptDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { ERRORS } from "@/constants";
+
+type ModalType = "addExt" | "addName" | "delete" | null;
 
 function FileNode({ id }: { id: string }) {
   const node = useAppSelector((s) => s.tree.byId[id]);
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-  const [openName, setOpenName] = useState(false);
-  const [openExt, setOpenExt] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
   const [extDraft, setExtDraft] = useState("");
-  const [openDelete, setOpenDelete] = useState(false);
+
+  const [openModal, setOpenModal] = useState<ModalType>(null);
 
   if (!node || node.type !== "file") return null;
   const meta = node.meta as { name: string; ext: string };
 
+  const closeModal = () => setOpenModal(null);
+  const openAddName = () => setOpenModal("addName");
+  const openAddExt = () => setOpenModal("addExt");
+  const openDelete = () => setOpenModal("delete");
+
   function handleRenameClick() {
     setNameDraft(meta.name);
     setExtDraft(meta.ext);
-    setOpenName(true);
+    openAddName();
   }
 
   function handleSubmitName(val?: string) {
     if (!val) return;
     setNameDraft(val);
-    setOpenName(false);
-    setOpenExt(true);
+    openAddExt();
   }
 
   function handleSubmitExt(extVal?: string) {
@@ -38,10 +44,10 @@ function FileNode({ id }: { id: string }) {
     try {
       dispatch(renameNode({ id, name: nameDraft, ext: extVal }));
       toast.success("Renamed");
+      closeModal();
     } catch (e: any) {
+      if(e.message === ERRORS.duplicate || e.message === ERRORS.invalid) openAddName();
       toast.error(e.message || "Error");
-    } finally {
-      setOpenExt(false);
     }
   }
 
@@ -52,7 +58,7 @@ function FileNode({ id }: { id: string }) {
     } catch (e: any) {
       toast.error(e.message || "Error");
     } finally {
-      setOpenDelete(false);
+      closeModal();
     }
   }
 
@@ -61,37 +67,37 @@ function FileNode({ id }: { id: string }) {
       <span className={`${styles.name} ${styles.mono}`}>📄 {meta.name}.{meta.ext}</span>
       <div className={styles.actions}>
         <button className={styles.btn} title="Rename" onClick={handleRenameClick} aria-label="Rename">✎</button>
-        <button className={styles.btn} title="Delete" onClick={() => setOpenDelete(true)} aria-label="Delete">❌</button>
+        <button className={styles.btn} title="Delete" onClick={openDelete} aria-label="Delete">❌</button>
       </div>
 
       <PromptDialog
-        open={openName}
+        open={openModal === "addName"}
         title="Rename file"
         label="File name"
         initial={nameDraft}
         placeholder="name"
         submitText="Next"
         onSubmit={handleSubmitName}
-        onClose={() => setOpenName(false)}
+        onClose={closeModal}
       />
 
       <PromptDialog
-        open={openExt}
+        open={openModal === "addExt"}
         title="Extension"
         label="Extension"
         initial={extDraft}
         placeholder="e.g. txt"
         submitText="Save"
         onSubmit={handleSubmitExt}
-        onClose={() => setOpenExt(false)}
+        onClose={closeModal}
       />
 
       <ConfirmDialog
-        open={openDelete}
+        open={openModal === "delete"}
         title="Delete file"
         message={`Delete ${meta.name}.${meta.ext}?`}
         onConfirm={handleConfirmDelete}
-        onClose={() => setOpenDelete(false)}
+        onClose={closeModal}
       />
     </div>
   );
