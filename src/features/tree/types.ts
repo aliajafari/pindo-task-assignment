@@ -1,11 +1,11 @@
-export type Kind = "dir" | "file";
+export type TypeNode = "dir" | "file";
 
 export type FileMeta = { name: string; ext: string };
 export type DirMeta = { name: string };
 
 export type Node = {
   id: string;
-  kind: Kind;
+  type: TypeNode;
   parentId: string | null;
   meta: FileMeta | DirMeta;
   children?: string[];

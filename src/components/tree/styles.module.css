@@ -1,0 +1,37 @@
+.name {
+  gap: 6px;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+
+.children {
+  margin-left: 14px;
+  border-left: 2px solid #eee;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  gap: 6px;
+  margin-left: auto;
+  display: flex;
+}
+
+.btn {
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #f0f0f0;
+}
+
